@@ -157,7 +157,7 @@ def delete_issue(id):
     cursor.execute("DELETE FROM issues WHERE id=?", (id,))
     connection.commit()
     connection.close()
-    return redirect("/issues")
+    return redirect("/")
 
 if __name__ == "__main__":
     init_db()

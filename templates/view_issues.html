@@ -3,88 +3,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Issue</title>
+    <title>{% if issue %}View Issue{% else %}View All Issues{% endif %}</title>
+
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; margin:0; background:#f4f6f9; }
-        header { background:#1f4e79; color:white; padding:20px; text-align:center; }
-        .container { width:70%; margin:30px auto; }
-        .card { background:white; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); padding:30px; }
-        h2 { color:#1f4e79; text-align:center; margin-bottom:25px; }
-        table { width:100%; border-collapse:collapse; }
-        th { width:30%; background:#1f4e79; color:white; padding:12px; text-align:left; }
-        td { padding:12px; border:1px solid #ddd; }
-        tr:nth-child(even) { background:#f8f9fa; }
-        .buttons { margin-top:30px; text-align:center; }
-        .btn {
-            display:inline-block; padding:10px 20px; margin:5px; text-decoration:none;
-            border-radius:5px; color:white;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
         }
-        .back { background:#007bff; }
-        .edit { background:#ffc107; color:black; }
-        .delete { background:#dc3545; }
+
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,sans-serif;
+            background:#f8f9fa;
+            color:#333;
+        }
+
+        header{
+            background:#1e4a7c;
+            color:white;
+            padding:20px 0;
+            text-align:center;
+        }
+
+        .header-content{
+            max-width:1200px;
+            margin:auto;
+            padding:0 20px;
+        }
+
+        h1{
+            font-size:28px;
+            font-weight:600;
+        }
+
+        .subtitle{
+            margin-top:5px;
+            opacity:.9;
+        }
+
+        .nav{
+            background:white;
+            box-shadow:0 2px 4px rgba(0,0,0,.1);
+            padding:15px 0;
+        }
+
+        .nav-content{
+            max-width:1200px;
+            margin:auto;
+            padding:0 20px;
+            display:flex;
+            gap:10px;
+        }
+
+        .container{
+            max-width:1200px;
+            margin:30px auto;
+            padding:0 20px;
+        }
+
+        .card{
+            background:white;
+            border-radius:12px;
+            box-shadow:0 4px 10px rgba(0,0,0,.08);
+            padding:30px;
+        }
+
+        h2{
+            color:#1e4a7c;
+            margin-bottom:25px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#1e4a7c;
+            color:white;
+            padding:14px;
+            text-align:left;
+        }
+
+        td{
+            padding:14px;
+            border-bottom:1px solid #e5e7eb;
+        }
+
+        tr:nth-child(even){
+            background:#f8fafc;
+        }
+
+        tr:hover{
+            background:#f1f5f9;
+        }
+
+        .btn{
+            text-decoration:none;
+            padding:10px 20px;
+            border-radius:6px;
+            display:inline-block;
+            font-weight:500;
+        }
+
+        .btn-primary{
+            background:#2563eb;
+            color:white;
+        }
+
+        .btn-secondary{
+            background:#64748b;
+            color:white;
+        }
+
+        .btn-small{
+            padding:6px 14px;
+            font-size:14px;
+        }
+
+        .btn-view{
+            background:#10b981;
+            color:white;
+        }
+
+        .btn-edit{
+            background:#facc15;
+            color:#1f2937;
+        }
+
+        .btn-delete{
+            background:#ef4444;
+            color:white;
+        }
+
+        .actions{
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+
+        .severity-low{
+            color:#22c55e;
+            font-weight:bold;
+        }
+
+        .severity-medium{
+            color:#f59e0b;
+            font-weight:bold;
+        }
+
+        .severity-high{
+            color:#ef4444;
+            font-weight:bold;
+        }
+
+        .severity-critical{
+            color:#b91c1c;
+            font-weight:bold;
+        }
+
+        .status-open{
+            background:#ef4444;
+            color:white;
+            padding:5px 12px;
+            border-radius:20px;
+        }
+
+        .status-inprogress{
+            background:#f59e0b;
+            color:white;
+            padding:5px 12px;
+            border-radius:20px;
+        }
+
+        .status-resolved{
+            background:#10b981;
+            color:white;
+            padding:5px 12px;
+            border-radius:20px;
+        }
+
+        .footer{
+            margin-top:60px;
+            background:#1e4a7c;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+        .button-group{
+            margin-top:30px;
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+        }
     </style>
 </head>
-<body>
-    <header>
-        <h1>Issue & Vulnerability Tracking System</h1>
-        <p>Issue Details</p>
-    </header>
-    <div class="container">
-        {% if issue %}  <!-- Single Issue View -->
-        <div class="card">
-            <h2>Issue Information</h2>
-            <table>
-                <tr><th>Issue ID</th><td>{{ issue.id }}</td></tr>
-                <tr><th>Title</th><td>{{ issue.title }}</td></tr>
-                <tr><th>Description</th><td>{{ issue.description }}</td></tr>
-                <tr><th>Severity</th><td>{{ issue.severity }}</td></tr>
-                <tr><th>Status</th><td>{{ issue.status }}</td></tr>
-                <tr><th>Assigned To</th><td>{{ issue.assigned_to or 'Not Assigned' }}</td></tr>
-                <tr><th>Date Reported</th><td>{{ issue.date_reported or 'N/A' }}</td></tr>
-                <tr><th>CVE ID</th><td>{{ issue.cve or 'N/A' }}</td></tr>
-                <tr><th>Remediation Steps</th><td>{{ issue.remediation or 'No steps provided' }}</td></tr>
-                <tr><th>Created At</th><td>{{ issue.created_at }}</td></tr>
-                <tr><th>Last Updated</th><td>{{ issue.last_updated }}</td></tr>
-            </table>
-            <div class="buttons">
-                <a href="/issues" class="btn back">← Back to All Issues</a>
-                <a href="/edit_issue/{{ issue.id }}" class="btn edit">Edit Issue</a>
-                <a href="/delete_issue/{{ issue.id }}" class="btn delete"
-                   onclick="return confirm('Delete this issue?');">Delete Issue</a>
-            </div>
-        </div>
 
-        {% else %}  <!-- List View (when accessing /issues) -->
-        <h2>All Issues</h2>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Severity</th>
-                <th>Status</th>
-                <th>Assigned To</th>
-                <th>Date Reported</th>
-                <th>Actions</th>
-            </tr>
-            {% for item in issues %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.title }}</td>
-                <td>{{ item.severity }}</td>
-                <td>{{ item.status }}</td>
-                <td>{{ item.assigned_to or 'N/A' }}</td>
-                <td>{{ item.date_reported or 'N/A' }}</td>
-                <td>
-                    <a href="/view_issue/{{ item.id }}" class="btn" style="background:#28a745;">View</a>
-                    <a href="/edit_issue/{{ item.id }}" class="btn" style="background:#ffc107; color:black;">Edit</a>
-                    <a href="/delete_issue/{{ item.id }}" class="btn" style="background:#dc3545;"
-                       onclick="return confirm('Delete this issue?');">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% endif %}
+<body>
+
+<header>
+    <div class="header-content">
+        <h1>Issue &amp; Vulnerability Tracking System</h1>
+        <p class="subtitle">Manage and monitor security issues efficiently</p>
     </div>
-    <footer><p>Issue & Vulnerability Tracking System | Flask Project</p></footer>
+</header>
+
+<div class="nav">
+    <div class="nav-content">
+
+        <a href="/" class="btn btn-primary">
+            ← Back to Dashboard
+        </a>
+
+        {% if issue %}
+        <a href="/issues" class="btn btn-secondary">
+            View All Issues
+        </a>
+        {% endif %}
+
+    </div>
+</div>
+
+<div class="container">
+
+{% if issue %}
+
+<div class="card">
+
+    <h2>Issue Details</h2>
+
+    <table>
+
+        <tr>
+            <th style="width:25%">Issue ID</th>
+            <td>{{ issue.id }}</td>
+        </tr>
+
+        <tr>
+            <th>Title</th>
+            <td>{{ issue.title }}</td>
+        </tr>
+
+        <tr>
+            <th>Description</th>
+            <td>{{ issue.description }}</td>
+        </tr>
+
+        <tr>
+            <th>Severity</th>
+            <td>
+                <span class="severity-{{ issue.severity|lower }}">
+                    {{ issue.severity }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>
+
+                {% if issue.status=="Resolved" %}
+                    <span class="status-resolved">{{ issue.status }}</span>
+
+                {% elif issue.status=="In Progress" %}
+                    <span class="status-inprogress">{{ issue.status }}</span>
+
+                {% elif issue.status=="Open" %}
+                    <span class="status-open">{{ issue.status }}</span>
+
+                {% else %}
+                    {{ issue.status }}
+
+                {% endif %}
+
+            </td>
+        </tr>
+
+        <tr>
+            <th>Assigned To</th>
+            <td>{{ issue.assigned_to or "Not Assigned" }}</td>
+        </tr>
+
+        <tr>
+            <th>Date Reported</th>
+            <td>{{ issue.date_reported or "N/A" }}</td>
+        </tr>
+
+        <tr>
+            <th>CVE ID</th>
+            <td>{{ issue.cve or "N/A" }}</td>
+        </tr>
+
+        <tr>
+            <th>Remediation Steps</th>
+            <td>{{ issue.remediation or "No remediation steps provided." }}</td>
+        </tr>
+
+        <tr>
+            <th>Created At</th>
+            <td>{{ issue.created_at }}</td>
+        </tr>
+
+        <tr>
+            <th>Last Updated</th>
+            <td>{{ issue.last_updated }}</td>
+        </tr>
+
+    </table>
+
+    <div class="button-group">
+
+        <a href="/edit_issue/{{ issue.id }}" class="btn btn-edit">
+            Edit Issue
+        </a>
+
+        <a href="/delete_issue/{{ issue.id }}"
+           class="btn btn-delete"
+           onclick="return confirm('Are you sure you want to delete this issue?');">
+            Delete Issue
+        </a>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<div class="card">
+
+    <h2>All Issues</h2>
+
+    <table>
+
+        <thead>
+
+        <tr>
+            <th>ID</th>
+            <th>Issue</th>
+            <th>Severity</th>
+            <th>Status</th>
+            <th>Assigned To</th>
+            <th>Date Reported</th>
+            <th>Actions</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for item in issues|sort(attribute='id') %}
+
+        <tr>
+
+            <td><strong>{{ item.id }}</strong></td>
+
+            <td>{{ item.title }}</td>
+
+            <td>
+                <span class="severity-{{ item.severity|lower }}">
+                    {{ item.severity }}
+                </span>
+            </td>
+
+            <td>
+
+                {% if item.status=="Resolved" %}
+                    <span class="status-resolved">{{ item.status }}</span>
+
+                {% elif item.status=="In Progress" %}
+                    <span class="status-inprogress">{{ item.status }}</span>
+
+                {% elif item.status=="Open" %}
+                    <span class="status-open">{{ item.status }}</span>
+
+                {% else %}
+                    {{ item.status }}
+
+                {% endif %}
+
+            </td>
+
+            <td>{{ item.assigned_to or "Not Assigned" }}</td>
+
+            <td>{{ item.date_reported }}</td>
+
+            <td class="actions">
+
+                <a href="/view_issue/{{ item.id }}"
+                   class="btn btn-small btn-view">
+                    View
+                </a>
+
+                <a href="/edit_issue/{{ item.id }}"
+                   class="btn btn-small btn-edit">
+                    Edit
+                </a>
+
+                <a href="/delete_issue/{{ item.id }}"
+                   class="btn btn-small btn-delete"
+                   onclick="return confirm('Delete this issue?');">
+                    Delete
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<footer class="footer">
+    Issue &amp; Vulnerability Tracking System | Flask Project
+</footer>
+
 </body>
 </html>
