@@ -84,6 +84,19 @@ def add_issue():
 
     return render_template("add_issue.html")
 
+@app.route("/issues")
+def view_issues():
+
+    connection = sqlite3.connect("issues.db")
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM issues ORDER BY id DESC")
+    issues = cursor.fetchall()
+
+    connection.close()
+
+    return render_template("view_issues.html", issues=issues)
 
 # ---------------- START APP ----------------
 if __name__ == "__main__":

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Issues</title>
+
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, Helvetica, sans-serif;
+            background:#f4f6f9;
+        }
+
+        header{
+            background:#1f4e79;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+        .container{
+            width:90%;
+            margin:30px auto;
+        }
+
+        .toolbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            margin-bottom:20px;
+            gap:10px;
+        }
+
+        .search-box{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+
+        input[type="text"], select{
+            padding:10px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            font-size:14px;
+        }
+
+        .btn{
+            background:#007bff;
+            color:white;
+            padding:10px 18px;
+            text-decoration:none;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            font-size:14px;
+        }
+
+        .btn:hover{
+            background:#0056b3;
+        }
+
+        .btn-edit{
+            background:#ffc107;
+            color:black;
+            padding:6px 12px;
+            text-decoration:none;
+            border-radius:4px;
+        }
+
+        .btn-edit:hover{
+            background:#e0a800;
+        }
+
+        .btn-delete{
+            background:#dc3545;
+            color:white;
+            padding:6px 12px;
+            text-decoration:none;
+            border-radius:4px;
+        }
+
+        .btn-delete:hover{
+            background:#b52a37;
+        }
+
+        .btn-view{
+            background:#28a745;
+            color:white;
+            padding:6px 12px;
+            text-decoration:none;
+            border-radius:4px;
+        }
+
+        .btn-view:hover{
+            background:#1f8b38;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+            box-shadow:0 2px 10px rgba(0,0,0,.15);
+        }
+
+        th{
+            background:#1f4e79;
+            color:white;
+            padding:12px;
+        }
+
+        td{
+            padding:12px;
+            border-bottom:1px solid #ddd;
+            text-align:center;
+        }
+
+        tr:hover{
+            background:#f2f2f2;
+        }
+
+        .critical{
+            color:#dc3545;
+            font-weight:bold;
+        }
+
+        .high{
+            color:#fd7e14;
+            font-weight:bold;
+        }
+
+        .medium{
+            color:#ffc107;
+            font-weight:bold;
+        }
+
+        .low{
+            color:#28a745;
+            font-weight:bold;
+        }
+
+        footer{
+            margin-top:40px;
+            background:#1f4e79;
+            color:white;
+            text-align:center;
+            padding:15px;
+        }
+    </style>
+
+</head>
+<body>
+
+<header>
+    <h1>Issue & Vulnerability Tracking System</h1>
+    <p>View and Manage Reported Issues</p>
+</header>
+
+<div class="container">
+
+    <div class="toolbar">
+
+        <div class="search-box">
+
+            <input type="text"
+                   placeholder="Search issue title...">
+
+            <select>
+                <option>All Severity</option>
+                <option>Critical</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+            </select>
+
+            <select>
+                <option>All Status</option>
+                <option>Open</option>
+                <option>In Progress</option>
+                <option>Resolved</option>
+                <option>Closed</option>
+            </select>
+
+            <button class="btn">Search</button>
+
+        </div>
+
+        <a href="/add_issue" class="btn">
+            + Add New Issue
+        </a>
+
+    </div>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Issue</th>
+            <th>Severity</th>
+            <th>Status</th>
+            <th>Assigned To</th>
+            <th>Date Reported</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for issue in issues %}
+
+        <tr>
+
+            <td>{{ issue.id }}</td>
+
+            <td>{{ issue.title }}</td>
+
+            <td class="{{ issue.severity|lower }}">
+                {{ issue.severity }}
+            </td>
+
+            <td>{{ issue.status }}</td>
+
+            <td>{{ issue.assigned_to }}</td>
+
+            <td>{{ issue.date_reported }}</td>
+
+            <td>
+                <a href="/issue/{{ issue.id }}" class="btn-view">View</a>
+
+                <a href="/edit/{{ issue.id }}" class="btn-edit">Edit</a>
+
+                <a href="/delete/{{ issue.id }}"
+                   class="btn-delete"
+                   onclick="return confirm('Delete this issue?');">
+                    Delete
+                </a>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    <a href="/" class="btn">← Back to Dashboard</a>
+
+</div>
+
+<footer>
+    <p>Issue & Vulnerability Tracking System</p>
+</footer>
+
+</body>
+</html>
