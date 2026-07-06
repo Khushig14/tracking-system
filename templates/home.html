@@ -114,6 +114,9 @@
             text-align: left;
             font-weight: 600;
         }
+        th.actions-header {
+            text-align: center;
+        }
         td {
             padding: 16px 12px;
             border-bottom: 1px solid #e5e7eb;
@@ -149,7 +152,7 @@
 
 <header>
     <div class="header-content">
-        <h1>X-Biz Tech Ventures</h1>
+        <h1>X-Biz TechVentures</h1>
         <p class="subtitle">Issue &amp; Vulnerability Tracking System</p>
     </div>
 </header>
@@ -186,11 +189,11 @@
                 <th>Status</th>
                 <th>Assigned To</th>
                 <th>Date Reported</th>
-                <th>Actions</th>
+                <th class="actions-header">Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for issue in issues %}
+            {% for issue in issues|sort(attribute='id') %}
             <tr>
                 <td><strong>{{ issue.id }}</strong></td>
                 <td>{{ issue.title }}</td>
@@ -198,7 +201,7 @@
                 <td>{{ issue.status }}</td>
                 <td>{{ issue.assigned_to or 'N/A' }}</td>
                 <td>{{ issue.date_reported or 'N/A' }}</td>
-                <td>
+                <td style="text-align: center;">
                     <a href="/view_issue/{{ issue.id }}" class="btn-small btn-view">View</a>
                     <a href="/edit_issue/{{ issue.id }}" class="btn-small btn-edit">Edit</a>
                     <a href="/delete_issue/{{ issue.id }}" class="btn-small btn-delete"
