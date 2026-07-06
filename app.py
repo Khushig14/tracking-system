@@ -137,7 +137,7 @@ def view_issue(id):
     cursor.execute("SELECT * FROM issues WHERE id=?", (id,))
     issue = cursor.fetchone()
     connection.close()
-    return render_template("view_issues.html", issue=issue)   # Pass 'issue'
+    return render_template("view_single_issue.html", issue=issue)   # Pass 'issue'
 
 # ---------------- EDIT ----------------
 @app.route("/edit_issue/<int:id>", methods=["GET", "POST"])
