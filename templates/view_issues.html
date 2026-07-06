@@ -3,43 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if issue %}View Issue{% else %}View All Issues{% endif %}</title>
+    <title>All Issues - X-Biz Tech Ventures</title>
     <style>
         *{ margin:0; padding:0; box-sizing:border-box; }
         body{
-            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,sans-serif;
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
             background:#f8f9fa; color:#333;
         }
         header{
-            background:#1e4a7c; color:white; padding:20px 0; text-align:center;
+            background:#1e4a7c; color:white; padding:25px 0; text-align:center;
         }
         .header-content{ max-width:1200px; margin:auto; padding:0 20px; }
-        h1{ font-size:28px; font-weight:600; }
-        .subtitle{ margin-top:5px; opacity:.9; }
+        h1{ font-size:32px; font-weight:600; }
+        .subtitle{ margin-top:8px; opacity:0.9; }
 
-        .nav{
-            background:white; box-shadow:0 2px 4px rgba(0,0,0,.1); padding:15px 0;
-        }
-        .nav-content{
-            max-width:1200px; margin:auto; padding:0 20px; display:flex; gap:10px;
-        }
-        .container{
-            max-width:1200px; margin:30px auto; padding:0 20px;
-        }
+        .nav{ max-width:1200px; margin:25px auto; padding:0 20px; }
+
+        .container{ max-width:1200px; margin:0 auto; padding:0 20px; }
         .card{
-            background:white; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,.08); padding:30px;
+            background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:30px;
         }
-        h2{ color:#1e4a7c; margin-bottom:20px; }
 
         /* Search & Filter Bar */
         .search-bar {
-            margin-bottom: 25px;
-            padding: 20px;
             background: #f8fafc;
-            border-radius: 8px;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 25px;
             border: 1px solid #e2e8f0;
         }
-        .search-bar form {
+        .search-form {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
@@ -51,54 +44,62 @@
         }
         .form-group label {
             font-size: 14px;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: #475569;
         }
         input[type="text"], select {
-            padding: 10px 12px;
+            padding: 12px 14px;     /* Same padding */
             border: 1px solid #cbd5e1;
             border-radius: 6px;
-            width: 220px;
+            font-size: 15px;
+            width: 260px;           /* Same width */
+            height: 48px;           /* Same height */
         }
         .btn-search {
-            padding: 10px 24px;
+            padding: 12px 28px;
             background: #1e4a7c;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            font-weight: 500;
+            height: 48px;
+        }
+        .btn-clear {
+            padding: 12px 22px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            height: 48px;
+            display: inline-flex;
+            align-items: center;
         }
 
         table{ width:100%; border-collapse:collapse; }
-        th{ background:#1e4a7c; color:white; padding:14px; text-align:left; }
-        td{ padding:14px; border-bottom:1px solid #e5e7eb; }
+        th{ background:#1e4a7c; color:white; padding:16px 12px; text-align:left; font-weight:600; }
+        th.center { text-align: center; }
+        td{ padding:16px 12px; border-bottom:1px solid #e5e7eb; }
         tr:nth-child(even){ background:#f8fafc; }
         tr:hover{ background:#f1f5f9; }
 
-        .btn{
-            text-decoration:none; padding:10px 20px; border-radius:6px;
-            display:inline-block; font-weight:500;
+        .btn-small{
+            padding:6px 14px;
+            font-size:13.5px;
+            border-radius:4px;
+            margin:0 3px;
         }
-        .btn-primary{ background:#2563eb; color:white; }
-        .btn-secondary{ background:#64748b; color:white; }
-        .btn-small{ padding:6px 14px; font-size:14px; }
         .btn-view{ background:#10b981; color:white; }
-        .btn-edit{ background:#facc15; color:#1f2937; }
+        .btn-edit{ background:#eab308; color:#1f2937; }
         .btn-delete{ background:#ef4444; color:white; }
-        .actions{ display:flex; gap:8px; flex-wrap:wrap; }
-
-        .severity-low{ color:#22c55e; font-weight:bold; }
-        .severity-medium{ color:#f59e0b; font-weight:bold; }
-        .severity-high{ color:#ef4444; font-weight:bold; }
-        .severity-critical{ color:#b91c1c; font-weight:bold; }
-
-        .status-open{ background:#ef4444; color:white; padding:5px 12px; border-radius:20px; }
-        .status-inprogress{ background:#f59e0b; color:white; padding:5px 12px; border-radius:20px; }
-        .status-resolved{ background:#10b981; color:white; padding:5px 12px; border-radius:20px; }
 
         .footer{
-            margin-top:60px; background:#1e4a7c; color:white;
-            text-align:center; padding:20px;
+            margin-top:80px;
+            background:#1e4a7c;
+            color:white;
+            text-align:center;
+            padding:22px;
         }
     </style>
 </head>
@@ -112,36 +113,18 @@
 </header>
 
 <div class="nav">
-    <div class="nav-content">
-        <a href="/" class="btn btn-primary">← Back to Dashboard</a>
-        {% if issue %}
-        <a href="/issues" class="btn btn-secondary">View All Issues</a>
-        {% endif %}
-    </div>
+    <a href="/" class="btn btn-primary" style="padding:12px 24px; background:#2563eb; color:white; text-decoration:none; border-radius:6px;">
+        ← Back to Dashboard
+    </a>
 </div>
 
 <div class="container">
-
-{% if issue %}
-    <!-- Single Issue View -->
-    <div class="card">
-        <h2>Issue Details</h2>
-        <!-- ... your existing single issue table ... -->
-        <!-- (keeping your original single issue code unchanged) -->
-        <table>
-            <!-- Your existing single issue table content here -->
-        </table>
-        <!-- Button group remains same -->
-    </div>
-
-{% else %}
-    <!-- All Issues View with Search -->
     <div class="card">
         <h2>All Issues</h2>
 
-        <!-- Search and Filter Form -->
+        <!-- Search & Filter -->
         <div class="search-bar">
-            <form method="GET" action="/issues">
+            <form method="GET" action="/issues" class="search-form">
                 <div class="form-group">
                     <label>Search</label>
                     <input type="text" name="search" value="{{ search }}" 
@@ -166,62 +149,60 @@
                         <option value="Open" {% if status_filter == 'Open' %}selected{% endif %}>Open</option>
                         <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
                         <option value="Resolved" {% if status_filter == 'Resolved' %}selected{% endif %}>Resolved</option>
+                        <option value="Closed" {% if status_filter == 'Closed' %}selected{% endif %}>Closed</option>
                     </select>
                 </div>
 
                 <button type="submit" class="btn-search">Search</button>
-                <a href="/issues" style="padding:10px 20px; color:#64748b;">Clear</a>
+                <a href="/issues" class="btn-clear">Clear</a>
             </form>
         </div>
 
+        <!-- Table -->
         <table>
             <thead>
-            <tr>
-                <th>ID</th>
-                <th>Issue</th>
-                <th>Severity</th>
-                <th>Status</th>
-                <th>Assigned To</th>
-                <th>Date Reported</th>
-                <th>Actions</th>
-            </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Issue</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Date Reported</th>
+                    <th class="center">Actions</th>
+                </tr>
             </thead>
             <tbody>
-            {% for item in issues %}
-            <tr>
-                <td><strong>#{{ item.id }}</strong></td>
-                <td>{{ item.title }}</td>
-                <td><span class="severity-{{ item.severity|lower }}">{{ item.severity }}</span></td>
-                <td>
-                    {% if item.status == "Resolved" %}
-                        <span class="status-resolved">{{ item.status }}</span>
-                    {% elif item.status == "In Progress" %}
-                        <span class="status-inprogress">{{ item.status }}</span>
-                    {% elif item.status == "Open" %}
-                        <span class="status-open">{{ item.status }}</span>
-                    {% else %}
-                        {{ item.status }}
-                    {% endif %}
-                </td>
-                <td>{{ item.assigned_to or "Not Assigned" }}</td>
-                <td>{{ item.date_reported or "N/A" }}</td>
-                <td class="actions">
-                    <a href="/view_issue/{{ item.id }}" class="btn btn-small btn-view">View</a>
-                    <a href="/edit_issue/{{ item.id }}" class="btn btn-small btn-edit">Edit</a>
-                    <a href="/delete_issue/{{ item.id }}" class="btn btn-small btn-delete"
-                       onclick="return confirm('Delete this issue?');">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
+                {% for item in issues|sort(attribute='id') %}
+                <tr>
+                    <td><strong>{{ item.id }}</strong></td>
+                    <td>{{ item.title }}</td>
+                    <td><span class="severity-{{ item.severity|lower }}">{{ item.severity }}</span></td>
+                    <td>
+                        {% if item.status == "Resolved" %}
+                            <span style="background:#10b981;color:white;padding:5px 12px;border-radius:20px;">{{ item.status }}</span>
+                        {% elif item.status == "Open" %}
+                            <span style="background:#ef4444;color:white;padding:5px 12px;border-radius:20px;">{{ item.status }}</span>
+                        {% else %}
+                            {{ item.status }}
+                        {% endif %}
+                    </td>
+                    <td>{{ item.assigned_to or "Not Assigned" }}</td>
+                    <td>{{ item.date_reported or "N/A" }}</td>
+                    <td style="text-align: center;">
+                        <a href="/view_issue/{{ item.id }}" class="btn-small btn-view">View</a>
+                        <a href="/edit_issue/{{ item.id }}" class="btn-small btn-edit">Edit</a>
+                        <a href="/delete_issue/{{ item.id }}" class="btn-small btn-delete"
+                           onclick="return confirm('Delete this issue?');">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
-{% endif %}
-
 </div>
 
 <footer class="footer">
-    X-Biz Tech Ventures | Issue &amp; Vulnerability Tracking System
+    X-Biz Tech Ventures | Issue &amp; Vulnerability Tracking System | Flask Project
 </footer>
 
 </body>
