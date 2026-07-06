@@ -96,14 +96,38 @@ def add_issue():
 # ---------------- VIEW ALL ----------------
 @app.route("/issues")
 def view_issues():
+    # Get search and filter values from URL
+    search = request.args.get('search', '').strip()
+    severity_filter = request.args.get('severity', '')
+    status_filter = request.args.get('status', '')
+
     connection = sqlite3.connect("issues.db")
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM issues ORDER BY id DESC")
+
+    # Build dynamic query
+    query = "SELECT * FROM issues WHERE 1=1"
+    params = []
+
+    if search:
+        query += " AND (title LIKE ? OR description LIKE ? OR cve LIKE ?)"
+        params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
+
+    if severity_filter:
+        query += " AND severity = ?"
+        params.append(severity_filter)
+
+    if status_filter:
+        query += " AND status = ?"
+        params.append(status_filter)
+
+    query += " ORDER BY id DESC"
+
+    cursor.execute(query, params)
     issues = cursor.fetchall()
     connection.close()
-    return render_template("view_issues.html", issues=issues)
 
+    return render_template("view_issues.html", issues=issues, search=search, severity_filter=severity_filter, status_filter=status_filter)
 # ---------------- VIEW SINGLE ISSUE ----------------
 @app.route("/view_issue/<int:id>")
 def view_issue(id):
