@@ -52,7 +52,16 @@
         .btn-clear { background: white; color: #64748b; border: 1px solid #cbd5e1; }
 
         table{ width:100%; border-collapse:collapse; }
-        th{ background:#1e4a7c; color:white; padding:16px 12px; text-align:left; }
+        th{ 
+            background:#1e4a7c; 
+            color:white; 
+            padding:16px 12px; 
+            text-align:left; 
+            cursor:pointer;
+            user-select: none;
+        }
+        th:hover { background:#334155; }
+        th .arrow { margin-left: 6px; font-size: 14px; }
         th.center { text-align: center; }
         td{ padding:16px 12px; border-bottom:1px solid #e5e7eb; }
         tr:nth-child(even){ background:#f8fafc; }
@@ -80,7 +89,7 @@
 <body>
 
 <header>
-    <h1>X-Biz Tech Ventures</h1>
+    <h1>X-Biz TechVentures</h1>
     <p class="subtitle">Issue &amp; Vulnerability Tracking System</p>
 </header>
 
@@ -117,15 +126,15 @@
             </form>
         </div>
 
-        <table>
+        <table id="allIssuesTable">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Issue</th>
-                    <th>Severity</th>
-                    <th>Status</th>
-                    <th>Assigned To</th>
-                    <th>Date Reported</th>
+                    <th onclick="sortTable(0, 'allIssuesTable')">ID <span class="arrow" id="arrow0">↕</span></th>
+                    <th onclick="sortTable(1, 'allIssuesTable')">Issue <span class="arrow" id="arrow1">↕</span></th>
+                    <th onclick="sortTable(2, 'allIssuesTable')">Severity <span class="arrow" id="arrow2">↕</span></th>
+                    <th onclick="sortTable(3, 'allIssuesTable')">Status <span class="arrow" id="arrow3">↕</span></th>
+                    <th onclick="sortTable(4, 'allIssuesTable')">Assigned To <span class="arrow" id="arrow4">↕</span></th>
+                    <th onclick="sortTable(5, 'allIssuesTable')">Date Reported <span class="arrow" id="arrow5">↕</span></th>
                     <th class="center">Actions</th>
                 </tr>
             </thead>
@@ -151,8 +160,41 @@
 </div>
 
 <footer class="footer">
-    X-Biz Tech Ventures | Issue &amp; Vulnerability Tracking System | Flask Project
+    X-Biz TechVentures | Issue &amp; Vulnerability Tracking System | Flask Project
 </footer>
+
+<script>
+function sortTable(col, tableId) {
+    const table = document.getElementById(tableId);
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    
+    const isAsc = table.getAttribute('data-sort-' + col) !== 'asc';
+    
+    rows.sort((a, b) => {
+        let x = a.cells[col].textContent.trim();
+        let y = b.cells[col].textContent.trim();
+        
+        if (!isNaN(x) && !isNaN(y)) {
+            return isAsc ? x - y : y - x;
+        }
+        return isAsc ? x.localeCompare(y) : y.localeCompare(x);
+    });
+    
+    rows.forEach(row => tbody.appendChild(row));
+    
+    // Reset all arrows
+    for (let i = 0; i < 6; i++) {
+        const arrow = document.getElementById('arrow' + i);
+        if (arrow) arrow.textContent = '↕';
+    }
+    
+    // Set current arrow
+    document.getElementById('arrow' + col).textContent = isAsc ? '↑' : '↓';
+    
+    table.setAttribute('data-sort-' + col, isAsc ? 'asc' : 'desc');
+}
+</script>
 
 </body>
 </html>
