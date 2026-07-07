@@ -137,7 +137,8 @@
         <input type="text" name="assigned_to">
 
         <label>Date Reported</label>
-        <input type="date" name="date_reported" required>
+        <input type="date" name="date_reported" id="date_reported" required>
+        <div class="error" id="dateError">Date cannot be in the future.</div>
 
         <label>CVE ID (Optional)</label>
         <input type="text" name="cve" placeholder="e.g. CVE-2026-XXXX">
@@ -158,6 +159,21 @@
 <footer>
     <p>Issue & Vulnerability Tracking System</p>
 </footer>
+<script>
+function validateDate() {
+    const dateInput = document.getElementById('date_reported');
+    const errorDiv = document.getElementById('dateError');
+    const selectedDate = new Date(dateInput.value);
+    const today = new Date();
+    today.setHours(0,0,0,0);
 
+    if (selectedDate > today) {
+        errorDiv.style.display = 'block';
+        return false;
+    }
+    errorDiv.style.display = 'none';
+    return true;
+}
+</script>
 </body>
 </html>
