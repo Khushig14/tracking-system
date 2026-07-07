@@ -37,7 +37,20 @@
         tr:nth-child(even) { background:#f8fafc; }
         tr:hover { background:#f1f5f9; }
 
-        .btn-small { padding:6px 14px; font-size:13px; border-radius:4px; margin:0 3px; }
+        /* Fixed Actions Column */
+        .actions-cell {
+            text-align: center;
+            white-space: nowrap;
+        }
+        .btn-small { 
+            padding: 6px 12px; 
+            font-size: 13px; 
+            border-radius: 4px; 
+            margin: 2px 3px;
+            display: inline-block;
+            min-width: 50px;
+            text-align: center;
+        }
         .btn-view { background:#10b981; color:white; }
         .btn-edit { background:#eab308; color:#1f2937; }
         .btn-delete { background:#ef4444; color:white; }
@@ -83,7 +96,7 @@
                 <th onclick="sortTable(3, 'recentTable')">Status <span class="arrow" id="arrow3">↕</span></th>
                 <th onclick="sortTable(4, 'recentTable')">Assigned To <span class="arrow" id="arrow4">↕</span></th>
                 <th onclick="sortTable(5, 'recentTable')">Date Reported <span class="arrow" id="arrow5">↕</span></th>
-                <th>Actions</th>
+                <th class="center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -95,7 +108,7 @@
                 <td>{{ issue.status }}</td>
                 <td>{{ issue.assigned_to or 'N/A' }}</td>
                 <td>{{ issue.date_reported or 'N/A' }}</td>
-                <td>
+                <td class="actions-cell">
                     <a href="/view_issue/{{ issue.id }}" class="btn-small btn-view">View</a>
                     <a href="/edit_issue/{{ issue.id }}" class="btn-small btn-edit">Edit</a>
                     <a href="/delete_issue/{{ issue.id }}" class="btn-small btn-delete" onclick="return confirm('Delete this issue?');">Delete</a>
@@ -130,12 +143,9 @@ function sortTable(col, tableId) {
     
     rows.forEach(row => tbody.appendChild(row));
     
-    // Reset all arrows
     for (let i = 0; i < 6; i++) {
         document.getElementById('arrow' + i).textContent = '↕';
     }
-    
-    // Set current arrow
     document.getElementById('arrow' + col).textContent = isAsc ? '↑' : '↓';
     
     table.setAttribute('data-sort-' + col, isAsc ? 'asc' : 'desc');
