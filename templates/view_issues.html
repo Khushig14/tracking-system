@@ -16,8 +16,8 @@
         h1{ font-size:32px; font-weight:600; }
         .subtitle{ margin-top:8px; opacity:0.9; }
 
-        .nav{ max-width:1200px; margin:25px auto; padding:0 20px; }
-        .container{ max-width:1200px; margin:0 auto; padding:0 20px; }
+        .nav{ max-width:1400px; margin:25px auto; padding:0 20px; }
+        .container{ max-width:1400px; margin:0 auto; padding:0 20px; }
         .card{
             background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:30px;
         }
@@ -56,30 +56,27 @@
             background:#1e4a7c; 
             color:white; 
             padding:16px 12px; 
-            text-align:left; 
+            text-align:center; 
             cursor:pointer;
             user-select: none;
         }
         th:hover { background:#334155; }
-        th .arrow { margin-left: 6px; font-size: 14px; }
-        th.center { text-align: center; }
+        .arrow { 
+            margin-left: 8px; 
+            font-size: 16px; 
+        }
         td{ padding:16px 12px; border-bottom:1px solid #e5e7eb; }
         tr:nth-child(even){ background:#f8fafc; }
         tr:hover{ background:#f1f5f9; }
 
-        /* Fixed Actions Column */
-        .actions-cell {
-            text-align: center;
-            white-space: nowrap;
-        }
-        .btn-small { 
-            padding: 6px 12px; 
-            font-size: 13px; 
-            border-radius: 4px; 
-            margin: 2px 3px;
+        .actions-cell { text-align: center; white-space: nowrap; }
+        .btn-small{
+            padding:6px 12px;
+            font-size:13.5px;
+            border-radius:4px;
+            margin:2px 3px;
             display: inline-block;
-            min-width: 50px;
-            text-align: center;
+            min-width: 52px;
         }
         .btn-view{ background:#10b981; color:white; }
         .btn-edit{ background:#eab308; color:#1f2937; }
@@ -183,9 +180,7 @@ function sortTable(col, tableId) {
         let x = a.cells[col].textContent.trim();
         let y = b.cells[col].textContent.trim();
         
-        if (!isNaN(x) && !isNaN(y)) {
-            return isAsc ? x - y : y - x;
-        }
+        if (!isNaN(x) && !isNaN(y)) return isAsc ? x - y : y - x;
         return isAsc ? x.localeCompare(y) : y.localeCompare(x);
     });
     
@@ -195,7 +190,6 @@ function sortTable(col, tableId) {
         const arrow = document.getElementById('arrow' + i);
         if (arrow) arrow.textContent = '↕';
     }
-    
     document.getElementById('arrow' + col).textContent = isAsc ? '↑' : '↓';
     
     table.setAttribute('data-sort-' + col, isAsc ? 'asc' : 'desc');
