@@ -24,15 +24,6 @@ def init_db():
         )
     """)
 
-    # Add missing columns safely (for existing databases)
-    try:
-        cursor.execute("ALTER TABLE issues ADD COLUMN assigned_to TEXT")
-        cursor.execute("ALTER TABLE issues ADD COLUMN date_reported DATE")
-        cursor.execute("ALTER TABLE issues ADD COLUMN cve TEXT")
-        cursor.execute("ALTER TABLE issues ADD COLUMN remediation TEXT")
-    except sqlite3.OperationalError:
-        pass  # Columns already exist
-
     connection.commit()
     connection.close()
 
@@ -61,6 +52,18 @@ def home():
     cursor.execute("SELECT COUNT(*) FROM issues WHERE status='Closed'")
     closed_issues = cursor.fetchone()[0]
 
+    cursor.execute("SELECT COUNT(*) FROM issues WHERE severity='Low'")
+    low_severity = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM issues WHERE severity='Medium'")
+    medium_severity = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM issues WHERE severity='High'")
+    high_severity = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM issues WHERE severity='Critical'")
+    critical_severity = cursor.fetchone()[0]
+    
     connection.close()
 
     return render_template(
@@ -70,7 +73,11 @@ def home():
         open_issues=open_issues,
         in_progress_issues=in_progress_issues,
         resolved_issues=resolved_issues,
-        closed_issues=closed_issues
+        closed_issues=closed_issues,
+        low_severity=low_severity,
+        medium_severity=medium_severity,
+        high_severity=high_severity,
+        critical_severity=critical_severity
     )
 
 # ---------------- ADD ISSUE ----------------
