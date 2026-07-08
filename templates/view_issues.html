@@ -169,6 +169,20 @@
 </footer>
 
 <script>
+const severityOrder = {
+    "Low": 1,
+    "Medium": 2,
+    "High": 3,
+    "Critical": 4
+};
+
+const statusOrder = {
+    "Open": 1,
+    "In Progress": 2,
+    "Resolved": 3,
+    "Closed": 4
+};
+
 function sortTable(col, tableId) {
     const table = document.getElementById(tableId);
     const tbody = table.tBodies[0];
@@ -180,16 +194,34 @@ function sortTable(col, tableId) {
         let x = a.cells[col].textContent.trim();
         let y = b.cells[col].textContent.trim();
         
-        if (!isNaN(x) && !isNaN(y)) return isAsc ? x - y : y - x;
+        // Custom Severity Sorting
+        if (col === 2) {
+            const xVal = severityOrder[x] || 0;
+            const yVal = severityOrder[y] || 0;
+            return isAsc ? xVal - yVal : yVal - xVal;
+        }
+        
+        // Custom Status Sorting
+        if (col === 3) {
+            const xVal = statusOrder[x] || 0;
+            const yVal = statusOrder[y] || 0;
+            return isAsc ? xVal - yVal : yVal - xVal;
+        }
+        
+        if (!isNaN(x) && !isNaN(y)) {
+            return isAsc ? x - y : y - x;
+        }
         return isAsc ? x.localeCompare(y) : y.localeCompare(x);
     });
     
     rows.forEach(row => tbody.appendChild(row));
     
+    // Reset all arrows
     for (let i = 0; i < 6; i++) {
         const arrow = document.getElementById('arrow' + i);
         if (arrow) arrow.textContent = '↕';
     }
+    
     document.getElementById('arrow' + col).textContent = isAsc ? '↑' : '↓';
     
     table.setAttribute('data-sort-' + col, isAsc ? 'asc' : 'desc');
