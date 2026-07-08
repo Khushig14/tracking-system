@@ -43,7 +43,7 @@ def home():
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
 
-    cursor.execute("SELECT * FROM issues ORDER BY id DESC")
+    cursor.execute("SELECT * FROM issues ORDER BY id ASC")
     issues = cursor.fetchall()
 
     cursor.execute("SELECT COUNT(*) FROM issues")
@@ -52,8 +52,14 @@ def home():
     cursor.execute("SELECT COUNT(*) FROM issues WHERE status='Open'")
     open_issues = cursor.fetchone()[0]
 
+    cursor.execute("SELECT COUNT(*) FROM issues WHERE status='In Progress'")
+    in_progress_issues = cursor.fetchone()[0]
+
     cursor.execute("SELECT COUNT(*) FROM issues WHERE status='Resolved'")
     resolved_issues = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM issues WHERE status='Closed'")
+    closed_issues = cursor.fetchone()[0]
 
     connection.close()
 
@@ -62,7 +68,9 @@ def home():
         issues=issues,
         total_issues=total_issues,
         open_issues=open_issues,
-        resolved_issues=resolved_issues
+        in_progress_issues=in_progress_issues,
+        resolved_issues=resolved_issues,
+        closed_issues=closed_issues
     )
 
 # ---------------- ADD ISSUE ----------------
