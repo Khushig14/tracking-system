@@ -50,7 +50,7 @@ This project is a **Flask-based Issue and Vulnerability Tracking System** design
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/tracking-system.git
+   git clone https://github.com/Khushig14/tracking-system.git
    cd tracking-system
    ```
 
@@ -72,8 +72,14 @@ This project is a **Flask-based Issue and Vulnerability Tracking System** design
 tracking-system/
 ├── app.py                    # Main Flask application
 ├── issues.db                 # SQLite database
-├── requirements.txt
-├── references.txt
+├── screenshots               # Screenshots of Application 
+    ├── Adding New Issue Page.png
+    ├── Delete Feature.png
+    ├── Editing Issue Page.png
+    ├── Home Page.png
+    ├── Search Filter.png
+    └── Viewing an Issue Page.png
+├── references.txt            # Sources Used  
 ├── README.md
 └── templates/
     ├── home.html
