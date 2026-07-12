@@ -13,8 +13,6 @@ A clean and functional web application built with Flask for tracking issues and 
 * [Technologies Used](#technologies-used)
 * [Getting Started](#getting-started)
 * [Project Structure](#project-structure)
-* [Screenshots](#screenshots)
-* [References](#references)
 * [Contributors](#contributors)
 
 ## About The Project
