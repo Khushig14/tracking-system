@@ -5,11 +5,14 @@ Project: Issue & Vulnerability Tracking System
    - Official Flask Documentation
    - Used for: Building the web application, handling routes, forms, and template rendering.
    - Source: https://python-adv-web-apps.readthedocs.io/en/latest/flask.html
+   - Source: https://www.youtube.com/watch?v=lMlmv6FehjI
+   - Source: https://www.youtube.com/watch?v=Z1RJmh_OqeA
 
 2. Python
    - Official Python Documentation
    - Used for: Core programming logic and integration with Flask framework.
    - Source: https://docs.python.org/3/
+   - Source: https://www.geeksforgeeks.org/python/python-programming-language-tutorial/
 
 3. SQLite with Python
    - Python sqlite3 Module Documentation
@@ -21,13 +24,19 @@ Project: Issue & Vulnerability Tracking System
    - Used for: Creating and formatting this project's documentation (README.md)
    - Source: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
 
+4. Searching and Sorting Features
+   - Youtube
+   - Used for: Used in creating the search and sorting of data.
+   - Source: https://www.youtube.com/watch?v=PWEl1ysbPAY
+   - Source: https://www.geeksforgeeks.org/python/how-to-implement-filtering-sorting-and-pagination-in-flask/
+
 5. HTML/CSS/JavaScript
    - AI based Frontend Deployment
    - Used for: Designing and implementing the user interface, styling, interactivity, and frontend functionality.
    - Source: https://chatgpt.com/share/6a53e62b-9224-83ed-983b-14b20fced858
    - Source: https://grok.com/c/107b9697-edee-4694-b478-f5196e55da38?rid=f0fc500f-0fab-476e-a57d-ac2a84e50e8c
 
-6. Sample Entries
+6. Sample Data Entries
    - AI based Sample Data
    - Used for: Generating sample issues and test data to verify system functionality and UI display.
    - Source: https://grok.com/c/044cd359-e45c-486d-93d9-5fc1f5165935?rid=c82b7140-ebf2-4630-bcfc-705c06b381e9

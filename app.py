@@ -3,7 +3,7 @@ import sqlite3
 
 app = Flask(__name__)
 
-# ---------------- DATABASE ----------------
+# DATABASE CREATION
 def init_db():
     connection = sqlite3.connect("issues.db")
     cursor = connection.cursor()
@@ -27,7 +27,7 @@ def init_db():
     connection.commit()
     connection.close()
 
-# ---------------- HOME ----------------
+# HOME PAGE
 @app.route("/")
 def home():
     connection = sqlite3.connect("issues.db")
@@ -80,7 +80,7 @@ def home():
         critical_severity=critical_severity
     )
 
-# ---------------- ADD ISSUE ----------------
+# ADD ISSUE PAGE
 @app.route("/add_issue", methods=["GET", "POST"])
 def add_issue():
     if request.method == "POST":
@@ -108,7 +108,7 @@ def add_issue():
 
     return render_template("add_issue.html")
 
-# ---------------- VIEW ALL ----------------
+# VIEW ALL ISSUES PAGE
 @app.route("/issues")
 def view_issues():
     # Get search and filter values from URL
@@ -120,7 +120,6 @@ def view_issues():
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
 
-    # Build dynamic query
     query = "SELECT * FROM issues WHERE 1=1"
     params = []
 
@@ -143,7 +142,8 @@ def view_issues():
     connection.close()
 
     return render_template("view_issues.html", issues=issues, search=search, severity_filter=severity_filter, status_filter=status_filter)
-# ---------------- VIEW SINGLE ISSUE ----------------
+
+# VIEW SINGLE ISSUE PAGE
 @app.route("/view_issue/<int:id>")
 def view_issue(id):
     connection = sqlite3.connect("issues.db")
@@ -152,9 +152,9 @@ def view_issue(id):
     cursor.execute("SELECT * FROM issues WHERE id=?", (id,))
     issue = cursor.fetchone()
     connection.close()
-    return render_template("view_single_issue.html", issue=issue)   # Pass 'issue'
+    return render_template("view_single_issue.html", issue=issue)   
 
-# ---------------- EDIT ----------------
+# EDIT ISSUE PAGE
 @app.route("/edit_issue/<int:id>", methods=["GET", "POST"])
 def edit_issue(id):
     connection = sqlite3.connect("issues.db")
@@ -188,7 +188,7 @@ def edit_issue(id):
     connection.close()
     return render_template("edit_issues.html", issue=issue)
 
-# ---------------- DELETE ----------------
+# DELETE ISSUE PAGE
 @app.route("/delete_issue/<int:id>")
 def delete_issue(id):
     connection = sqlite3.connect("issues.db")
